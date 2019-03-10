@@ -1,0 +1,37 @@
+import numpy as np
+import pandas as pd
+import csv 
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import classification_report
+from sklearn.preprocessing import StandardScaler, OneHotEncoder
+
+
+train = pd.read_csv('GlobalLandTemperaturesByCity.csv', header = 0)
+print("hello")
+#train.head()
+#train = csv.reader(open('gun-violence-data_01-2013_03-2018.csv', 'rb'))
+#header = train.next()
+#
+#data = []
+#for row in train:
+#    data.append(row)
+#data = np.array(data)
+
+y = train.pop('AverageTemperature').values
+features = train[['Latitude', 'Longitude']]
+features.head()
+#preprocess = make_column_transformer((['participant_age', 'n_killed'], StandardScaler()), (['participant_age_group'], OneHotEncoder()))
+#preprocess.fit_transform(features).toarray()
+X_train, X_test, y_train, y_test = train_test_split(features, y, random_state = 0)
+print(X_train)
+print(X_test)
+print(y_train)
+print(y_test)
+
+logreg = LogisticRegression()
+logreg.fit(X_train, y_train)
+y_pred_class = logreg.predict(X_test)
+y_true = y_train
+y_pred = y_pred_class
+print(classification_report(y_true,y_pred))
